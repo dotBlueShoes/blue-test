@@ -8,6 +8,7 @@
 //#define WAVE_NO_OPT // (18-20)
 #define NEW_WAY_WAVE // 18-20
 #include <blue/wave.hpp>
+#include <blue/struct.hpp>
 
 #include <intrin.h>
 
