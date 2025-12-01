@@ -7,8 +7,12 @@
 //
 #include <blue/wave.hpp>
 #include <blue/error.hpp>
+#include <blue/struct.hpp>
+#include <blue/types.hpp>
 //
 #include <gtest/gtest.h>
+
+interface
 
 TEST (TypeSize, u8)  { EXPECT_EQ (sizeof  (u8), 1); }
 TEST (TypeSize, u16) { EXPECT_EQ (sizeof (u16), 2); }

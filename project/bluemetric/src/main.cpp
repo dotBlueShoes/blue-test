@@ -4,8 +4,6 @@
 #define WAVE_NO_OPT 
 #include <blue/wave.hpp>
 #include <blue/error.hpp>
-#undef max
-#undef min
 #include <benchmark/benchmark.h>
 
 
