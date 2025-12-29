@@ -76,11 +76,11 @@ TEST (MathWave, u8Casting) {
 
 TEST (cmpxchg16b, EqualityTrue) {
 
-    alignas (16) u64 out[2] { 10, 10 };
-    register u64 exp[2] { 10, 10 };
+    alignas (16) u64 out[2] { 10, 1 };
+    register u64 exp[2] { 10, 1 };
     register u64 des[2] { 22, 22 };
 
-    bool isEqual = cmpxchg16b (out, exp[1], exp[0], des[1], des[0]);
+    bool isEqual = cmpxchg16b (out, exp[0], exp[1], des[0], des[1]);
 
     EXPECT_EQ (out[0], des[0]);
     EXPECT_EQ (out[1], des[1]);
@@ -89,11 +89,11 @@ TEST (cmpxchg16b, EqualityTrue) {
 
 TEST (cmpxchg16b, EqualityFalse) {
 
-    alignas (16) u64 out[2] { 22, 22 };
-    register u64 exp[2] { 1, 1 };
-    register u64 des[2] { 10, 10 };
+    alignas (16) u64 out[2] { 22, 21 };
+    register u64 exp[2] { 1, 2 };
+    register u64 des[2] { 10, 9 };
 
-    bool isEqual = cmpxchg16b (out, exp[1], exp[0], des[1], des[0]);
+    bool isEqual = cmpxchg16b (out, exp[0], exp[1], des[0], des[1]);
 
     EXPECT_EQ (out[0], exp[0]);
     EXPECT_EQ (out[1], exp[1]);
@@ -102,11 +102,11 @@ TEST (cmpxchg16b, EqualityFalse) {
 
 TEST (atomic_cmpxchg16b, EqualityTrue) {
 
-    alignas (16) u64 out[2] { 10, 10 };
-    register u64 exp[2] { 10, 10 };
+    alignas (16) u64 out[2] { 10, 1 };
+    register u64 exp[2] { 10, 1 };
     register u64 des[2] { 22, 22 };
 
-    bool isEqual = atomic_cmpxchg16b (out, exp[1], exp[0], des[1], des[0]);
+    bool isEqual = atomic_cmpxchg16b (out, exp[0], exp[1], des[0], des[1]);
 
     EXPECT_EQ (out[0], des[0]);
     EXPECT_EQ (out[1], des[1]);
@@ -115,11 +115,11 @@ TEST (atomic_cmpxchg16b, EqualityTrue) {
 
 TEST (atomic_cmpxchg16b, EqualityFalse) {
 
-    alignas (16) u64 out[2] { 22, 22 };
-    register u64 exp[2] { 1, 1 };
-    register u64 des[2] { 10, 10 };
+    alignas (16) u64 out[2] { 22, 21 };
+    register u64 exp[2] { 1, 2 };
+    register u64 des[2] { 10, 9 };
 
-    bool isEqual = atomic_cmpxchg16b (out, exp[1], exp[0], des[1], des[0]);
+    bool isEqual = atomic_cmpxchg16b (out, exp[0], exp[1], des[0], des[1]);
 
     EXPECT_EQ (out[0], exp[0]);
     EXPECT_EQ (out[1], exp[1]);
