@@ -10,6 +10,8 @@
 #include <blue/struct.hpp>
 #include <blue/types.hpp>
 //
+#include <blue/cmpxchg16b.hpp>
+//
 #include <gtest/gtest.h>
 
 interface
@@ -72,6 +74,57 @@ TEST (MathWave, u8Casting) {
     EXPECT_NEAR (r, 0.25f, 0.10000); 
 }
 
+TEST (cmpxchg16b, EqualityTrue) {
+
+    alignas (16) u64 out[2] { 10, 10 };
+    register u64 exp[2] { 10, 10 };
+    register u64 des[2] { 22, 22 };
+
+    bool isEqual = cmpxchg16b (out, exp[1], exp[0], des[1], des[0]);
+
+    EXPECT_EQ (out[0], des[0]);
+    EXPECT_EQ (out[1], des[1]);
+    EXPECT_EQ (isEqual, true);
+}
+
+TEST (cmpxchg16b, EqualityFalse) {
+
+    alignas (16) u64 out[2] { 22, 22 };
+    register u64 exp[2] { 1, 1 };
+    register u64 des[2] { 10, 10 };
+
+    bool isEqual = cmpxchg16b (out, exp[1], exp[0], des[1], des[0]);
+
+    EXPECT_EQ (out[0], exp[0]);
+    EXPECT_EQ (out[1], exp[1]);
+    EXPECT_EQ (isEqual, false);
+}
+
+TEST (atomic_cmpxchg16b, EqualityTrue) {
+
+    alignas (16) u64 out[2] { 10, 10 };
+    register u64 exp[2] { 10, 10 };
+    register u64 des[2] { 22, 22 };
+
+    bool isEqual = atomic_cmpxchg16b (out, exp[1], exp[0], des[1], des[0]);
+
+    EXPECT_EQ (out[0], des[0]);
+    EXPECT_EQ (out[1], des[1]);
+    EXPECT_EQ (isEqual, true);
+}
+
+TEST (atomic_cmpxchg16b, EqualityFalse) {
+
+    alignas (16) u64 out[2] { 22, 22 };
+    register u64 exp[2] { 1, 1 };
+    register u64 des[2] { 10, 10 };
+
+    bool isEqual = atomic_cmpxchg16b (out, exp[1], exp[0], des[1], des[0]);
+
+    EXPECT_EQ (out[0], exp[0]);
+    EXPECT_EQ (out[1], exp[1]);
+    EXPECT_EQ (isEqual, false);
+}
 
 TEST (MathWave, Addition) {
     const u8 a = 32; // 0.25f

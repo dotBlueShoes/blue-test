@@ -7,7 +7,3 @@
 %cmd		= %_path%\.quail\cmd
 %pr 		= x64-win-release
 %pd 		= x64-win-debug
-
-# TODO - Variables
-#%compilersets	= %_quail%\cmd\clangset
-%compilersets	= %vcvarsall%
