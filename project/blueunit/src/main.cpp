@@ -1,6 +1,7 @@
 ﻿// Created 2025.05.07 by Matthew Strumiłło (dotBlueShoes)
 //  LICENSE: GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
 //
+#define BLUELIB_IMPLEMENTATION
 #define WAVE_NO_OPT // this is the fastest on debug build
 //#define WAVE_LUT_OPT
 //#define WAVE_BITWISE_SCALING_OPT

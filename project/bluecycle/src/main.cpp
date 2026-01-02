@@ -1,6 +1,7 @@
 ﻿// Created 2025.05.08 by Matthew Strumiłło (dotBlueShoes)
 //  LICENSE: GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
 //
+#define BLUELIB_IMPLEMENTATION
 #include <blue/error.hpp>
 // default (18-20)
 //#define WAVE_LUT_OPT // (18-20)
