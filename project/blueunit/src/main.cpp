@@ -14,8 +14,8 @@
 #include <blue/cmpxchg16b.hpp>
 //
 #include <gtest/gtest.h>
-
-interface
+//
+#include <blue/windows/controls.hpp>
 
 TEST (TypeSize, u8)  { EXPECT_EQ (sizeof  (u8), 1); }
 TEST (TypeSize, u16) { EXPECT_EQ (sizeof (u16), 2); }
