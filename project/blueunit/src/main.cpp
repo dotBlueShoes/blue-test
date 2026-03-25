@@ -17,27 +17,27 @@
 //
 #include <blue/windows/controls.hpp>
 
-TEST (TypeSize, u8)  { EXPECT_EQ (sizeof  (u8), 1); }
-TEST (TypeSize, u16) { EXPECT_EQ (sizeof (u16), 2); }
-TEST (TypeSize, u32) { EXPECT_EQ (sizeof (u32), 4); }
-TEST (TypeSize, u64) { EXPECT_EQ (sizeof (u64), 8); }
+TEST (type_size, u8)  { EXPECT_EQ (sizeof  (u8), 1); }
+TEST (type_size, u16) { EXPECT_EQ (sizeof (u16), 2); }
+TEST (type_size, u32) { EXPECT_EQ (sizeof (u32), 4); }
+TEST (type_size, u64) { EXPECT_EQ (sizeof (u64), 8); }
 
-TEST (TypeSize, s8)  { EXPECT_EQ (sizeof  (s8), 1); }
-TEST (TypeSize, s16) { EXPECT_EQ (sizeof (s16), 2); }
-TEST (TypeSize, s32) { EXPECT_EQ (sizeof (s32), 4); }
-TEST (TypeSize, s64) { EXPECT_EQ (sizeof (s64), 8); }
+TEST (type_size, s8)  { EXPECT_EQ (sizeof  (s8), 1); }
+TEST (type_size, s16) { EXPECT_EQ (sizeof (s16), 2); }
+TEST (type_size, s32) { EXPECT_EQ (sizeof (s32), 4); }
+TEST (type_size, s64) { EXPECT_EQ (sizeof (s64), 8); }
 
-TEST (TypeSize, c8)  { EXPECT_EQ (sizeof  (c8), 1); }
-TEST (TypeSize, c16) { EXPECT_EQ (sizeof (c16), 2); }
-TEST (TypeSize, r32) { EXPECT_EQ (sizeof (r32), 4); }
-TEST (TypeSize, r64) { EXPECT_EQ (sizeof (r64), 8); }
+TEST (type_size, c8)  { EXPECT_EQ (sizeof  (c8), 1); }
+TEST (type_size, c16) { EXPECT_EQ (sizeof (c16), 2); }
+TEST (type_size, r32) { EXPECT_EQ (sizeof (r32), 4); }
+TEST (type_size, r64) { EXPECT_EQ (sizeof (r64), 8); }
 
-TEST (TypeSize, w8)     { EXPECT_EQ (sizeof     (w8), 1); }
-TEST (TypeSize, w16)    { EXPECT_EQ (sizeof    (w16), 2); }
-TEST (TypeSize, u32r32) { EXPECT_EQ (sizeof (u32r32), 4); }
+TEST (type_size, w8)     { EXPECT_EQ (sizeof     (w8), 1); }
+TEST (type_size, w16)    { EXPECT_EQ (sizeof    (w16), 2); }
+TEST (type_size, u32r32) { EXPECT_EQ (sizeof (u32r32), 4); }
 
 
-TEST (MathNormal, u8Casting) {
+TEST (math_norm, u8Casting) {
     const u8 i = 16; // 0.25f
     
     r32 r;
@@ -48,7 +48,7 @@ TEST (MathNormal, u8Casting) {
 }
 
 
-TEST (MathNormal, Addition) {
+TEST (math_norm, Addition) {
     const u8 a = 16; // 0.25f
     const u8 b = 16; // 0.25f
 
@@ -62,7 +62,7 @@ TEST (MathNormal, Addition) {
 }
 
 
-TEST (MathWave, u8Casting) {
+TEST (math_wave, u8Casting) {
     const u8 i = 32; // 0.25f
     
     r32 r;
@@ -75,103 +75,7 @@ TEST (MathWave, u8Casting) {
     EXPECT_NEAR (r, 0.25f, 0.10000); 
 }
 
-//TEST (cmpxchg16b_zf, EqualityTrue) {
-//
-//    alignas (16) u64 out[2] { 10, 1 };
-//    register u64 exp[2] { 10, 1 };
-//    register u64 des[2] { 22, 22 };
-//
-//    bool isEqual = cmpxchg16b_zf (out, exp[0], exp[1], des[0], des[1]);
-//
-//    EXPECT_EQ (out[0], des[0]);
-//    EXPECT_EQ (out[1], des[1]);
-//    EXPECT_EQ (isEqual, true);
-//}
-//
-//TEST (cmpxchg16b_zf, EqualityFalse) {
-//
-//    alignas (16) u64 out[2] { 22, 21 };
-//    register u64 exp[2] { 1, 2 };
-//    register u64 des[2] { 10, 9 };
-//
-//    bool isEqual = cmpxchg16b_zf (out, exp[0], exp[1], des[0], des[1]);
-//
-//    EXPECT_EQ (out[0], exp[0]);
-//    EXPECT_EQ (out[1], exp[1]);
-//    EXPECT_EQ (isEqual, false);
-//}
-
-TEST (cmpxchg16b, masm_equality_true) {
-    alignas (16) u64 out[2] { 10, 1 };
-    register u64 a[2] { 10, 1 };
-    register u64 b[2] { 22, 22 };
-
-    x_cmpxchg16b (b[1], a[1], b[0], a[0], out);
-
-    EXPECT_EQ (out[0], b[0]);
-    EXPECT_EQ (out[1], b[1]);
-}
-
-TEST (cmpxchg16b, masm_equality_false) {
-    alignas (16) u64 out[2] { 10, 1 };
-    register u64 a[2] { 9, 2 };
-    register u64 b[2] { 22, 22 };
-
-    x_cmpxchg16b (b[1], a[1], b[0], a[0], out);
-
-    EXPECT_EQ (out[0], a[0]);
-    EXPECT_EQ (out[1], a[1]);
-}
-
-TEST (cmpxchg16b, masm_atomic_equality_true) {
-    alignas (16) u64 out[2] { 10, 1 };
-    register u64 a[2] { 10, 1 };
-    register u64 b[2] { 22, 22 };
-
-    atomic_cmpxchg16b (b[1], a[1], b[0], a[0], out);
-
-    EXPECT_EQ (out[0], b[0]);
-    EXPECT_EQ (out[1], b[1]);
-}
-
-TEST (cmpxchg16b, masm_atomic_equality_false) {
-    alignas (16) u64 out[2] { 10, 1 };
-    register u64 a[2] { 9, 2 };
-    register u64 b[2] { 22, 22 };
-
-    atomic_cmpxchg16b (b[1], a[1], b[0], a[0], out);
-
-    EXPECT_EQ (out[0], a[0]);
-    EXPECT_EQ (out[1], a[1]);
-}
-
-//TEST (atomic_cmpxchg16b_zf, EqualityTrue) {
-//
-//    alignas (16) u64 out[2] { 10, 1 };
-//    register u64 exp[2] { 10, 1 };
-//    register u64 des[2] { 22, 22 };
-//
-//    bool isEqual = atomic_cmpxchg16b_zf (out, exp[0], exp[1], des[0], des[1]);
-//
-//    EXPECT_EQ (out[0], des[0]);
-//    EXPECT_EQ (out[1], des[1]);
-//    EXPECT_EQ (isEqual, true);
-//}
-//
-//TEST (atomic_cmpxchg16b_zf, EqualityFalse) {
-//
-//    alignas (16) u64 out[2] { 22, 21 };
-//    register u64 exp[2] { 1, 2 };
-//    register u64 des[2] { 10, 9 };
-//
-//    bool isEqual = atomic_cmpxchg16b_zf (out, exp[0], exp[1], des[0], des[1]);
-//
-//    EXPECT_EQ (out[0], exp[0]);
-//    EXPECT_EQ (out[1], exp[1]);
-//    EXPECT_EQ (isEqual, false);
-//}
-
-TEST (MathWave, Addition) {
+TEST (math_wave, Addition) {
     const u8 a = 32; // 0.25f
     const u8 b = 32; // 0.25f
     
@@ -188,7 +92,106 @@ TEST (MathWave, Addition) {
 }
 
 
-TEST (Environment, Initialization) {
+
+TEST (cmpxchg16b, equality_true) {
+    alignas (16) u64 out[2] { 10, 1 };
+    alignas (16) u64 a[2] { 10, 1 };
+    register const u64 b[2] { 22, 22 };
+
+    x_cmpxchg16b (b, a, out);
+
+    EXPECT_EQ (out[0], b[0]);
+    EXPECT_EQ (out[1], b[1]);
+}
+
+TEST (cmpxchg16b, equality_false) {
+    alignas (16) u64 out[2] { 10, 1 };
+    alignas (16) u64 a[2] { 9, 2 };
+    register const u64 b[2] { 22, 22 };
+
+    x_cmpxchg16b (b, a, out);
+
+    EXPECT_EQ (out[0], a[0]);
+    EXPECT_EQ (out[1], a[1]);
+}
+
+TEST (cmpxchg16b, atomic_equality_true) {
+    alignas (16) u64 out[2] { 10, 1 };
+    register u64 a[2] { 10, 1 };
+    register const u64 b[2] { 22, 22 };
+
+    atomic_cmpxchg16b (b, a, out);
+
+    EXPECT_EQ (out[0], b[0]);
+    EXPECT_EQ (out[1], b[1]);
+}
+
+TEST (cmpxchg16b, atomic_equality_false) {
+    alignas (16) u64 out[2] { 10, 1 };
+    register u64 a[2] { 9, 2 };
+    register const u64 b[2] { 22, 22 };
+
+    atomic_cmpxchg16b (b, a, out);
+
+    EXPECT_EQ (out[0], a[0]);
+    EXPECT_EQ (out[1], a[1]);
+}
+
+TEST (cmpxchg16b, equality_flag_true) {
+
+    alignas (16) u64 out[2] { 10, 1 };
+    alignas (16) u64 a[2] { 10, 1 };
+    register const u64 b[2] { 22, 22 };
+
+    bool isEqual = x_cmpxchg16b_zf (b, a, out);
+
+    EXPECT_EQ (out[0], b[0]);
+    EXPECT_EQ (out[1], b[1]);
+    EXPECT_EQ (isEqual, true);
+}
+
+TEST (cmpxchg16b, equality_flag_false) {
+
+    alignas (16) u64 out[2] { 22, 21 };
+    alignas (16) u64 a[2] { 1, 2 };
+    register const u64 b[2] { 10, 9 };
+
+    bool isEqual = x_cmpxchg16b_zf (b, a, out);
+
+    EXPECT_EQ (out[0], a[0]);
+    EXPECT_EQ (out[1], a[1]);
+    EXPECT_EQ (isEqual, false);
+}
+
+TEST (cmpxchg16b, atomic_equality_flag_true) {
+
+    alignas (16) u64 out[2] { 10, 1 };
+    register u64 a[2] { 10, 1 };
+    register const u64 b[2] { 22, 22 };
+
+    bool isEqual = atomic_cmpxchg16b_zf (b, a, out);
+
+    EXPECT_EQ (out[0], b[0]);
+    EXPECT_EQ (out[1], b[1]);
+    EXPECT_EQ (isEqual, true);
+}
+
+TEST (cmpxchg16b, atomic_equality_flag_false) {
+
+    alignas (16) u64 out[2] { 22, 21 };
+    register u64 a[2] { 1, 2 };
+    register const u64 b[2] { 10, 9 };
+
+    bool isEqual = atomic_cmpxchg16b_zf (b, a, out);
+
+    EXPECT_EQ (out[0], a[0]);
+    EXPECT_EQ (out[1], a[1]);
+    EXPECT_EQ (isEqual, false);
+}
+
+
+
+TEST (environment, initialization) {
 
     { // BLUE START
         TIMESTAMP_BEGIN = TIMESTAMP::GetCurrent ();
