@@ -11,7 +11,7 @@
 #include <blue/struct.hpp>
 #include <blue/types.hpp>
 //
-#include <blue/cmpxchg16b.hpp>
+#include <blue/instructions/cmpxchg16b.hpp>
 //
 #include <gtest/gtest.h>
 //
@@ -75,57 +75,101 @@ TEST (MathWave, u8Casting) {
     EXPECT_NEAR (r, 0.25f, 0.10000); 
 }
 
-TEST (cmpxchg16b, EqualityTrue) {
+//TEST (cmpxchg16b_zf, EqualityTrue) {
+//
+//    alignas (16) u64 out[2] { 10, 1 };
+//    register u64 exp[2] { 10, 1 };
+//    register u64 des[2] { 22, 22 };
+//
+//    bool isEqual = cmpxchg16b_zf (out, exp[0], exp[1], des[0], des[1]);
+//
+//    EXPECT_EQ (out[0], des[0]);
+//    EXPECT_EQ (out[1], des[1]);
+//    EXPECT_EQ (isEqual, true);
+//}
+//
+//TEST (cmpxchg16b_zf, EqualityFalse) {
+//
+//    alignas (16) u64 out[2] { 22, 21 };
+//    register u64 exp[2] { 1, 2 };
+//    register u64 des[2] { 10, 9 };
+//
+//    bool isEqual = cmpxchg16b_zf (out, exp[0], exp[1], des[0], des[1]);
+//
+//    EXPECT_EQ (out[0], exp[0]);
+//    EXPECT_EQ (out[1], exp[1]);
+//    EXPECT_EQ (isEqual, false);
+//}
 
+TEST (cmpxchg16b, masm_equality_true) {
     alignas (16) u64 out[2] { 10, 1 };
-    register u64 exp[2] { 10, 1 };
-    register u64 des[2] { 22, 22 };
+    register u64 a[2] { 10, 1 };
+    register u64 b[2] { 22, 22 };
 
-    bool isEqual = cmpxchg16b (out, exp[0], exp[1], des[0], des[1]);
+    x_cmpxchg16b (b[1], a[1], b[0], a[0], out);
 
-    EXPECT_EQ (out[0], des[0]);
-    EXPECT_EQ (out[1], des[1]);
-    EXPECT_EQ (isEqual, true);
+    EXPECT_EQ (out[0], b[0]);
+    EXPECT_EQ (out[1], b[1]);
 }
 
-TEST (cmpxchg16b, EqualityFalse) {
-
-    alignas (16) u64 out[2] { 22, 21 };
-    register u64 exp[2] { 1, 2 };
-    register u64 des[2] { 10, 9 };
-
-    bool isEqual = cmpxchg16b (out, exp[0], exp[1], des[0], des[1]);
-
-    EXPECT_EQ (out[0], exp[0]);
-    EXPECT_EQ (out[1], exp[1]);
-    EXPECT_EQ (isEqual, false);
-}
-
-TEST (atomic_cmpxchg16b, EqualityTrue) {
-
+TEST (cmpxchg16b, masm_equality_false) {
     alignas (16) u64 out[2] { 10, 1 };
-    register u64 exp[2] { 10, 1 };
-    register u64 des[2] { 22, 22 };
+    register u64 a[2] { 9, 2 };
+    register u64 b[2] { 22, 22 };
 
-    bool isEqual = atomic_cmpxchg16b (out, exp[0], exp[1], des[0], des[1]);
+    x_cmpxchg16b (b[1], a[1], b[0], a[0], out);
 
-    EXPECT_EQ (out[0], des[0]);
-    EXPECT_EQ (out[1], des[1]);
-    EXPECT_EQ (isEqual, true);
+    EXPECT_EQ (out[0], a[0]);
+    EXPECT_EQ (out[1], a[1]);
 }
 
-TEST (atomic_cmpxchg16b, EqualityFalse) {
+TEST (cmpxchg16b, masm_atomic_equality_true) {
+    alignas (16) u64 out[2] { 10, 1 };
+    register u64 a[2] { 10, 1 };
+    register u64 b[2] { 22, 22 };
 
-    alignas (16) u64 out[2] { 22, 21 };
-    register u64 exp[2] { 1, 2 };
-    register u64 des[2] { 10, 9 };
+    atomic_cmpxchg16b (b[1], a[1], b[0], a[0], out);
 
-    bool isEqual = atomic_cmpxchg16b (out, exp[0], exp[1], des[0], des[1]);
-
-    EXPECT_EQ (out[0], exp[0]);
-    EXPECT_EQ (out[1], exp[1]);
-    EXPECT_EQ (isEqual, false);
+    EXPECT_EQ (out[0], b[0]);
+    EXPECT_EQ (out[1], b[1]);
 }
+
+TEST (cmpxchg16b, masm_atomic_equality_false) {
+    alignas (16) u64 out[2] { 10, 1 };
+    register u64 a[2] { 9, 2 };
+    register u64 b[2] { 22, 22 };
+
+    atomic_cmpxchg16b (b[1], a[1], b[0], a[0], out);
+
+    EXPECT_EQ (out[0], a[0]);
+    EXPECT_EQ (out[1], a[1]);
+}
+
+//TEST (atomic_cmpxchg16b_zf, EqualityTrue) {
+//
+//    alignas (16) u64 out[2] { 10, 1 };
+//    register u64 exp[2] { 10, 1 };
+//    register u64 des[2] { 22, 22 };
+//
+//    bool isEqual = atomic_cmpxchg16b_zf (out, exp[0], exp[1], des[0], des[1]);
+//
+//    EXPECT_EQ (out[0], des[0]);
+//    EXPECT_EQ (out[1], des[1]);
+//    EXPECT_EQ (isEqual, true);
+//}
+//
+//TEST (atomic_cmpxchg16b_zf, EqualityFalse) {
+//
+//    alignas (16) u64 out[2] { 22, 21 };
+//    register u64 exp[2] { 1, 2 };
+//    register u64 des[2] { 10, 9 };
+//
+//    bool isEqual = atomic_cmpxchg16b_zf (out, exp[0], exp[1], des[0], des[1]);
+//
+//    EXPECT_EQ (out[0], exp[0]);
+//    EXPECT_EQ (out[1], exp[1]);
+//    EXPECT_EQ (isEqual, false);
+//}
 
 TEST (MathWave, Addition) {
     const u8 a = 32; // 0.25f

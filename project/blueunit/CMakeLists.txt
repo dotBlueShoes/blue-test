@@ -1,4 +1,9 @@
 cmake_minimum_required (VERSION 3.27 FATAL_ERROR)
+
+if (MSVC)
+    enable_language (ASM_MASM)
+endif ()
+
 project (BLUEUNIT VERSION 1.0.0 LANGUAGES C CXX)
 
 
@@ -62,10 +67,22 @@ endif ()
 
 
 # --- Define the executable
-add_executable (
-	${PROJECT_NAME} ${HEADER_FILES} 
-	src/main.cpp
-)
+if (MSVC)
+
+    add_executable (
+    	${PROJECT_NAME} ${HEADER_FILES} 
+    	src/main.cpp
+        "${BLUELIB_CMPXCHG16B}"
+    )
+
+else ()
+
+    add_executable (
+    	${PROJECT_NAME} ${HEADER_FILES} 
+    	src/main.cpp
+    )
+
+endif ()
 
 
 # --- Make this project 'headers' available to use.
