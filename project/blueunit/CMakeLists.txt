@@ -65,21 +65,22 @@ elseif 	(${PROFILE} EQUAL 2)
 
 endif ()
 
+set (TESTFILES src/main.cpp 
+    src/basetypes.cpp src/bitwise.cpp src/cmpxchg16b.cpp src/wave.cpp
+)
 
 # --- Define the executable
 if (MSVC)
 
     add_executable (
-    	${PROJECT_NAME} ${HEADER_FILES} 
-    	src/main.cpp
+    	${PROJECT_NAME} ${HEADER_FILES} ${TESTFILES}
         "${BLUELIB_CMPXCHG16B}"
     )
 
 else ()
 
     add_executable (
-    	${PROJECT_NAME} ${HEADER_FILES} 
-    	src/main.cpp
+    	${PROJECT_NAME} ${HEADER_FILES} ${TESTFILES}
     )
 
 endif ()
